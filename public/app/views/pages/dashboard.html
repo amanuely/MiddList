@@ -1,0 +1,59 @@
+<div class="page-header">
+	
+	<h1>The following Item are up for sells</h1>
+	<!-- <h1 ng-repeat="item in main.listing">
+	 {{item["title"]}}
+	</h1> -->
+	    <div class="panel panel-default">
+        <div class="panel-heading"></div>
+
+                        <div class="col-sm-2">
+                       <h1>Title</h1>
+                        </div>
+                        <div class="col-sm-2">
+                       <h1>location</h1>
+                        </div>
+                        <!-- <div class="col-sm-2">
+                       <h1>picture</h1>
+                        </div> -->
+                        <div class="col-sm-2">
+                        <h1>Price</h1>
+                        </div>
+                        <div class="col-sm-2">
+                        <h1>Description</h1>
+                        </div>
+                  </div>
+
+	<div class="panel-body">
+            <div class="input-group">
+                <li class="list-group-item" ng-repeat="itm in main.listing">
+                  <div class="container">
+                      
+                      
+                        
+                        <div class="col-sm-2">
+                        {{itm.title}}
+                        </div>
+                        <div class="col-sm-1">
+                        {{itm.location}}
+                        </div>
+                         <div class="col-sm-2">
+                        {{itm.pic}}
+                        </div>
+                        <div class="col-sm-1">
+                        {{itm.price}}
+                        </div>
+                        
+                        <div class="col-sm-4">
+                        {{itm. description}}
+                        </div>
+                       
+                        <div class="col-sm-1">
+                         <button type="submit" class="btn btn-success" ng-click="main.PostItem()">Buy</button>
+                       
+                        </div>
+
+                  </div>
+                </li>
+            </div>
+</div>

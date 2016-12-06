@@ -1,0 +1,54 @@
+<div class="=page-header"> 
+<h1>User Registration</h1>
+ </div>
+
+<form name= "regForm" ng-submit="register.regUser(regData);" novalidate>
+	<label>Name:</label>
+	<input class="form-control" type="text" name="firstname" placeholder="please enter your full name"
+	 ng-model="register.regData.name">
+	 
+	<br>
+
+	<label>Email:</label>
+	<input class="form-control" type="text" name="email" placeholder="please enter email"
+	 ng-model="register.regData.email">
+	<br>
+	<label>password:</label>
+	<input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password">
+	<br>
+	<label>re-enter:</label>
+	<input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password">
+	<br>
+	<button class="btn btn-primary" type="submit">Register</button>
+
+
+
+</form>
+
+<div>
+		<span> {{regFrom}}</span>
+</div>
+
+
+
+
+
+
+<br>
+
+<div class="row show-hide-message" ng-show="register.successMsg">
+<div class=" alert alert-success"> {{register.successMsg}}</div>
+	
+</div>
+
+<div class="row show-hide-message" ng-show="register.errorsMsg">
+<div class=" alert alert-danger"> {{register.errorsMsg}}</div>
+	
+</div>
+
+<div>
+	
+</div>
+
+
+	

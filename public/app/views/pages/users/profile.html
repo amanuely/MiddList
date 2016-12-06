@@ -1,0 +1,39 @@
+<div class="container">
+    
+
+    <div class="panel panel-default">
+        <div class="panel-heading">My Listings</div>
+        <div class="panel-body">
+            <div class="input-group">
+               
+                    <div class="panel-body">
+            <div class="input-group">
+                <li class="list-group-item" ng-repeat="itm in main.listing">
+                  <div class="container">
+                      
+                      
+                        
+                        <div class="col-sm-2">
+                        {{itm.title}}
+                        </div>
+                       
+                        
+                       
+                        
+                       
+                         
+                        <div class="col-sm-1">
+                         <button type="submit" class="btn btn-danger" ng-click="main.PostItem()">Delete</button>
+                       
+                        </div>
+
+                  </div>
+                </li>
+            </div>
+</div>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
