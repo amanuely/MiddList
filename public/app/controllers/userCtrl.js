@@ -22,7 +22,7 @@ angular.module('userControllers',['userServices'])
 				$timeout(function() {
 					$location.path('/');
 				},
-				 2000);
+				 1000);
 
 
 			}
@@ -32,6 +32,7 @@ angular.module('userControllers',['userServices'])
 			}
 
 		});
+		
 
 	};
 });

@@ -7,6 +7,28 @@ var validate= require('mongoose-validator');
 
 
 
+
+var mongoose = require('mongoose'),
+  bcrypt = require('bcryptjs');
+
+var userSchema = mongoose.Schema({
+  email: String,
+  pw: String,
+});
+
+userSchema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.pw);
+};
+
+//module.exports = mongoose.model('U', userSchema);
+
+
+
+
+
+
+//------
+
 var nameValidator = [
  validate({
   validator: 'matches',
@@ -26,7 +48,7 @@ validate({
 //
 validate({
   validator: 'isLength',
-  arguments: [3, 20],
+  arguments: [3, 50],
   message: 'Email should be atleast 3 characters long'
 })
  
@@ -90,12 +112,6 @@ UserSchema.methods.comparePassword=function(password){
 
 
 
-//bcrypt.compareSync(myPlaintextPassword, hash);
 
 
-
-// bcrypt.hash("bacon", null,null, function(err, hash) {
-//   // Store hash in your password DB. 
-// });
-
-module.exports=mongoose.model('User',UserSchema);
+module.exports=mongoose.model('MiddList_persistent_Users',userSchema);

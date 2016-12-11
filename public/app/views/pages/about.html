@@ -1,5 +1,13 @@
 
-<div class="page-header">
-	<h1>Hi</h1>
+<div class="page-header" ng-init ="conformer.finish()">
+	<h1>Hi there</h1>
 	
 </div>
+
+<div class="row show-hide-message" ng-show="register.successMsg">
+<div class=" alert alert-success"> {{conformer.successMsg}}</div>
+	
+</div>
+
+<div class="row show-hide-message" ng-show="register.errorsMsg">
+<div class=" alert alert-danger"> {{conformer.errorsMsg}}</div>
