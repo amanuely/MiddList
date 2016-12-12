@@ -7,12 +7,16 @@ var bodyParser = require('body-parser');
 var router=express.Router();
 var appRoutes= require('./app/routes/api')(router);
 var path= require('path');
-
+var expressValidator = require('express-validator');
+var expressSession = require('express-session');
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(expressValidator());
+app.use(expressSession({secret: 'secret', saveUninitialized: false, resave: false}));
 app.use(express.static(__dirname+'/public'));
+
 app.use('/api', appRoutes);
 mongoose.Promise = global.Promise;
 

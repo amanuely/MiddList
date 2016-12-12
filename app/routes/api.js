@@ -7,6 +7,10 @@ var validate = require('mongoose-validator');
 var mongoose=require('mongoose');
 var nev = require('email-verification')(mongoose);
 var  bcrypt = require('bcryptjs');
+var expressValidator= require('express-validator');
+var expressSession= require('express-session');
+
+
 
 
 
@@ -18,20 +22,20 @@ var  bcrypt = require('bcryptjs');
 module.exports= function(router){
 
 
-	// sync version of hashing function
-var myHasher = function(password, tempUserData, insertTempUser, callback) {
-  var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-  return insertTempUser(hash, tempUserData, callback);
-};
+// 	// sync version of hashing function
+// var myHasher = function(password, tempUserData, insertTempUser, callback) {
+//   var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+//   return insertTempUser(hash, tempUserData, callback);
+// };
 
-// async version of hashing function
-myHasher = function(password, tempUserData, insertTempUser, callback) {
-  bcrypt.genSalt(8, function(err, salt) {
-    bcrypt.hash(password, salt, function(err, hash) {
-      return insertTempUser(hash, tempUserData, callback);
-    });
-  });
-};
+// // async version of hashing function
+// myHasher = function(password, tempUserData, insertTempUser, callback) {
+//   bcrypt.genSalt(8, function(err, salt) {
+//     bcrypt.hash(password, salt, function(err, hash) {
+//       return insertTempUser(hash, tempUserData, callback);
+//     });
+//   });
+// };
 
 
 
@@ -49,7 +53,6 @@ nev.configure({
     }
   },
 
-  hashingFunction: myHasher,
   passwordFieldName: 'pw',
 }, function(err, options) {
   if (err) {
@@ -84,7 +87,7 @@ nev.generateTempUserModel(User, function(err, tempUserModel) {
 		user.password= req.body.password;
 		var email=req.body.email;
 		
-		console.log("request coming");
+		
 
 
 	// if email or password field is empty respond to the user
@@ -95,135 +98,85 @@ nev.generateTempUserModel(User, function(err, tempUserModel) {
 	}
 	// otherwise, create temporary user
 	else{
-				
-				//console.log(user);
+
+		// check the validity of email and password
+			req.check('email', 'Invalid email address').isEmail();
+			req.check("password", "password must be at least 8 characters, one symbol , 1 upper case").matches( /^((?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W])).{8,40}$/, "i");
+
+
+			var errors = req.validationErrors();
+  			if (errors) {
+  				console.log(errors);
+   
+  				return res.json({
+					          	success:false, message: errors[0]["msg"] });
+	 		 } 
 
 
 
+	 		 // if there is no error with our email or password, we send verification email to the user
 
 
-					   nev.createTempUser(user, function(err, existingPersistentUser, newTempUser) {
-					      if (err) {
-					        return res.status(404).send('ERROR: creating temp user FAILED');
-					      }
+	   nev.createTempUser(user, function(err, existingPersistentUser, newTempUser) {
+	      if (err) {
+	        return res.status(404).send('ERROR: creating temp user FAILED');
+	      }
 
-					      // user already exists in persistent collection
-					      if (existingPersistentUser) {
-					      
-					        return res.json({
-					        	success:false,
-					          message: 'You have already signed up and confirmed your account. Did you forget your password?'
-					        });
-					      }
+	      // user already exists in persistent collection
+	      if (existingPersistentUser) {
+	      
+	        return res.json({
+	        	success:false,
+	          message: 'You have already signed up and confirmed your account. Did you forget your password?'
+	        });
+	      }
 
-					      // new user created
-					      if (newTempUser) {
-					      	console.log("temp user is created");
-					        var URL = newTempUser[nev.options.URLFieldName];
+	      // new user created
+	      if (newTempUser) {
 
-					        nev.sendVerificationEmail(email, URL, function(err, info) {
-					          if (err) {
-					            return res.status(404).send('ERROR: sending verification email FAILED');
-					          }
-					          console.log("email sent");
-					          res.json({
-					          	success:true,
-					            message: 'An email has been sent to you. Please check it to verify your account.',
-					            info: info
-					          });
-					        });
+	      	
+	        var URL = newTempUser[nev.options.URLFieldName];
 
-					      // user already exists in temporary collection!
-					      } else {
-					      	console.log("already signed up");
-					        res.json({
-					        success:true,
-					          message: 'You have already signed up. Please check your email to verify your account.'
-					        });
-					      }
-					    });
+	        nev.sendVerificationEmail(email, URL, function(err, info) {
+	          if (err) {
+	            return res.status(404).send('ERROR: sending verification email FAILED');
+	          }
+	          
+	          res.json({
+	          	success:true,
+	            message: 'An email has been sent to you. Please check it to verify your account.',
+	            info: info
+	          });
+	        });
 
-
-
-
-
-
-
-
-
-
-
-
-			    // nev.createTempUser(user, function(err, existingPersistentUser, newTempUser) {
-				   //    if (err) {
-				   //    	console.log(err);
-				      	
-				   //    	res.json({success:false, message:'there is error with creating a temporary user'});
-				   //    }
-
-
-			    //   // user already exists in persistent collection
-				   //    if (existingPersistentUser) {
-				   //    	res.json({success:false, message:'You have already signed up and confirmed your account. Did you forget your password? '});
-				   //    }
-
-
-			    //   // new user created
-				   //    if (newTempUser) {
-				   //    	// create a new user
-				   //    	 // var URL = newTempUser[nev.options.URLFieldName];
-				   //    	  var URL = 'MQ8YaNXXUQaujf0Fw8hnU6sBv3WLeu21xyXfgrBeLumUbtqA'
-				   
-				   //    	  //console.log(URL);
-
-					  //       nev.sendVerificationEmail(user.email, URL, function(err, info) {
-					  //         if (err) {
-					  //           	res.json({success: false, message:err});
-					  //         }
-					  //         	//res.json({success:true, message:'Email has been sent to you'});
-					  //       });
-
-				   //    // user already exists in temporary collection!
-					  //     } 
-					  //     else 
-					  //     {
-
-							// res.json({success:false, message:'you already signed up'});
-				   //    }
-
-			    // });
+	      
+	      } else {
+	    
+	        res.json({
+	        success:true,
+	          message: 'You have already signed up. Please check your email to verify your account.'
+	        });
+	      }
+	    });
 
 
 
 
 
 
-//user accesses the link that is sent
-// router.GET('/email-verification/:URL', function(req, res) {
-// 	console.log("here in the confirmation api");
-//   var url = req.params.URL;
-//   console.log(url);
 
-//   nev.confirmTempUser(url, function(err, user) {
-//     if (user) {
-//       nev.sendConfirmationEmail(user.email, function(err, info) {
-//         if (err) {
-//           //return res.status(404).send('ERROR: sending confirmation email FAILED');
-//         }
-//         res.json({
-//         	status:true,
-//           message: 'CONFIRMED!',
-//           info: info
-//         });
-//       });
-//     } else {
-//     	res.json({success:true, message:'Email has been sent to you'});
-//       //return res.status(404).send('ERROR: confirming temp user FAILED');
-//     }
-//   });
-// });
+
+
+
+
 
 		
+
+
+
+
+
+
 
 
 
@@ -286,17 +239,17 @@ router.get('/verify/:URL', function(req, res) {
 
   nev.confirmTempUser(url, function(err, user) {
     if (user) {
-      nev.sendConfirmationEmail(user.email, function(err, info) {
-        if (err) {
-          return res.status(404).send('ERROR: sending confirmation email FAILED');
-        }
-        res.json({
-          message: 'CONFIRMED!',
-          info: info
+       res.json({
+        success:true,
+          message: 'CONFIRMED!'
         });
-      });
-    } else {
-      return res.status(404).send('ERROR: confirming temp user FAILED');
+
+    } 
+    else {
+       res.json({
+        success:false,
+          message: 'There is error confirming your email adress!'
+        });
     }
   });
 });
@@ -369,6 +322,7 @@ router.get('/verify/:URL', function(req, res) {
 				if (req.body.password) {
 
 						var validpassword=user.comparePassword(req.body.password);
+						console.log(validpassword);
 
 				}
 				else{

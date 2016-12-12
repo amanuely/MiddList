@@ -1,13 +1,11 @@
 
 <div class="page-header" ng-init ="conformer.finish()">
-	<h1>Hi there</h1>
+</div>
+
+<div class="row show-hide-message" ng-show="conformer.successMsg">
+<div class=" alert alert-success"> Your Accout has been verify. you can now log in</div>
 	
 </div>
 
-<div class="row show-hide-message" ng-show="register.successMsg">
-<div class=" alert alert-success"> {{conformer.successMsg}}</div>
-	
-</div>
-
-<div class="row show-hide-message" ng-show="register.errorsMsg">
-<div class=" alert alert-danger"> {{conformer.errorsMsg}}</div>
+<div class="row show-hide-message" ng-show="conformer.errorsMsg">
+<div class=" alert alert-danger"> There is an error confriming your email adress! Try to register again</div>
