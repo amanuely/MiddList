@@ -4,6 +4,7 @@ angular.module('sellController',['listingServices'])
 
 .controller('sellctrl',function($scope,$http, $location,$timeout,Sell, Auth){
 	var item=this;
+	var response =this;
 	
 	$scope.listController={};
 	
@@ -26,6 +27,21 @@ angular.module('sellController',['listingServices'])
 
 			});
 		}
+
+
+		this.deleteItem= function(deletedata){
+
+			$http.put('api/delete',deletedata ).then(function(d){
+
+				if (d.data.submitting) {
+					console.log("success");
+				}
+				console.log(d);
+			})
+			
+		}
+
+
 
 		this.submit=function(sellItem){
 			var uploadUrl = 'api/upload';

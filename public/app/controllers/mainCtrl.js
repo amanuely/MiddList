@@ -17,6 +17,8 @@ angular.module('mainController',['authServices'])
 			app.name=data.data.name;
 			app.loadme=true;
 		});
+		Auth.delete();
+
 		Auth.getListing().then(function(result){
 			//console.log("returning data");
 			//console.log(result);

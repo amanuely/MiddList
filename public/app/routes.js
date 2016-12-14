@@ -66,6 +66,8 @@ var app=angular.module('appRoutes',['ngRoute'])
 
 
 			templateUrl:'app/views/pages/users/profile.html',
+			controller:'sellctrl',
+			controllerAs:'listController',
 			authenticated:true
 
 		})

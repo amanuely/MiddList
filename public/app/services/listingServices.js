@@ -8,6 +8,11 @@ angular.module('listingServices',['listingServices'])
 	
 		return $http.post('api/sells',sellData);
 	}
+	sellFactory.delete=function(deleteData){
+		
+	
+		return $http.delete('api/sells',deleteData);
+	}
 
 	sellFactory.upload=function(uploadUrl, data){
 		//console.log(uploadUrl);

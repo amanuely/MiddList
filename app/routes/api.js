@@ -403,6 +403,21 @@ router.get('/verify/:URL', function(req, res) {
 	router.post('/profile',function(req,res){
 		res.send(req.decoded);
 	});
+
+	router.put('/delete',function(req,res){
+
+		console.log(req.body._id);
+
+		Sell.remove({ title: req.body.title}, function (err) {
+	  if (err) return handleError(err);
+	  // removed!
+	});
+		//console.log("here");
+		res.json({success:true, message:'we will delete your stuff '});
+	});
+
+
+
 	router.get('/sells',function(req,res){
 		Sell.find({}).exec(function(err,result){
 			if (err) {

@@ -37,6 +37,17 @@ angular.module('authServices',[])
 		}
 
 	};
+	authFactory.delete=function(d){
+		if (AuthToken.getToken) {
+			console.log("trying to delete");
+			//console.log("deleting"+ deleteData);
+			//return $http.delete('/api/sells');
+		}else{
+			$q.reject({message:'user has no token'});
+		}
+
+	};
+
 
 	authFactory.logout=function(){
 		AuthToken.setToken();
