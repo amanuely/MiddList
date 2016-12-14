@@ -9,6 +9,9 @@ var nev = require('email-verification')(mongoose);
 var  bcrypt = require('bcryptjs');
 var expressValidator= require('express-validator');
 var expressSession= require('express-session');
+var multer  = require('multer')
+var upload = multer()
+
 
 
 
@@ -22,20 +25,20 @@ var expressSession= require('express-session');
 module.exports= function(router){
 
 
-// 	// sync version of hashing function
-// var myHasher = function(password, tempUserData, insertTempUser, callback) {
-//   var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-//   return insertTempUser(hash, tempUserData, callback);
-// };
+	//sync version of hashing function
+var myHasher = function(password, tempUserData, insertTempUser, callback) {
+  var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+  return insertTempUser(hash, tempUserData, callback);
+};
 
-// // async version of hashing function
-// myHasher = function(password, tempUserData, insertTempUser, callback) {
-//   bcrypt.genSalt(8, function(err, salt) {
-//     bcrypt.hash(password, salt, function(err, hash) {
-//       return insertTempUser(hash, tempUserData, callback);
-//     });
-//   });
-// };
+// async version of hashing function
+myHasher = function(password, tempUserData, insertTempUser, callback) {
+  bcrypt.genSalt(8, function(err, salt) {
+    bcrypt.hash(password, salt, function(err, hash) {
+      return insertTempUser(hash, tempUserData, callback);
+    });
+  });
+};
 
 
 
@@ -53,6 +56,7 @@ nev.configure({
     }
   },
 
+  hashingFunction: myHasher,
   passwordFieldName: 'pw',
 }, function(err, options) {
   if (err) {
@@ -84,7 +88,7 @@ nev.generateTempUserModel(User, function(err, tempUserModel) {
 		var user= new User();
 		user.name= req.body.name;
 		user.email= req.body.email;
-		user.password= req.body.password;
+		user.pw= req.body.password;
 		var email=req.body.email;
 		
 		
@@ -231,6 +235,18 @@ nev.generateTempUserModel(User, function(err, tempUserModel) {
 
 });
 
+// app.post('/profile', upload.single('avatar'), function (req, res, next) {
+//   // req.file is the `avatar` file
+//   // req.body will hold the text fields, if there were any
+// })
+
+router.post('/upload', upload.single('avatar'),function(req, res){
+	console.log("posting picture");
+		//console.log(req.body.type);
+		console.log(req.files);
+		res.json({success: true});
+	});
+
 
 router.get('/verify/:URL', function(req, res) {
 	console.log("yeeeeeees");
@@ -253,6 +269,10 @@ router.get('/verify/:URL', function(req, res) {
     }
   });
 });
+
+
+
+
 
 
 // 	router.get('/aSsAIzB2uoVORqy8fY2pWzOayl2YDkiJAZ7ZEEltYQ2VJ1dW', function(req, res) {
@@ -308,7 +328,8 @@ router.get('/verify/:URL', function(req, res) {
 
 	router.post('/authenticate',function(req, res){
 
-		User.findOne({email:req.body.email}).select('email password').exec(function(err, user){
+		User.findOne({email:req.body.email}).select('email pw').exec(function(err, user){
+			//console.log(user);
 			if (err) {
 				throw err;
 			}
@@ -321,8 +342,17 @@ router.get('/verify/:URL', function(req, res) {
 
 				if (req.body.password) {
 
-						var validpassword=user.comparePassword(req.body.password);
-						console.log(validpassword);
+
+						var validpassword=user.validPassword(req.body.password);
+					
+
+
+
+// 					var x=	bcrypt.compare("veggies", user.pw, function(err, res) {
+//     // res = false
+// });
+
+					// console.log(x);
 
 				}
 				else{

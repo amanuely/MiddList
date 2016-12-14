@@ -2,7 +2,9 @@
 var mongoose=require('mongoose');
 var titlize = require('mongoose-title-case');
 var Schema = mongoose.Schema;
-var bcrypt= require('bcrypt-nodejs');
+//var bcrypt= require('bcrypt-nodejs');
+  var bcrypt = require('bcryptjs');
+
 var validate= require('mongoose-validator');
 
 
@@ -89,16 +91,20 @@ var userSchema = mongoose.Schema({
   
 // });
 
-// UserSchema.plugin(titlize, {
-//   //paths: [ 'firstname'], // Array of paths 
-//   paths: [ 'name' ]
+// // UserSchema.plugin(titlize, {
+// //   //paths: [ 'firstname'], // Array of paths 
+// //   paths: [ 'name' ]
  
-// });
+// // });
 
 
 // UserSchema.methods.comparePassword=function(password){
 //   return bcrypt.compareSync(password, this.password);
 // };
+
+userSchema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.pw);
+};
 
 
 

@@ -3,3 +3,4 @@ angular.module('userApp',['appRoutes','userControllers','mainController','sellCo
 	$httpProvider.interceptors.push('AuthInterceptors');
 });
 
+

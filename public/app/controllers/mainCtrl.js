@@ -21,7 +21,7 @@ angular.module('mainController',['authServices'])
 			//console.log("returning data");
 			//console.log(result);
 			app.listing=result.data;
-			console.log(app.listing);
+			//console.log(app.listing);
 			//app.email=data.data.email;
 			//app.name=data.data.name;
 			app.loadme=true;

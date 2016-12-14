@@ -17,6 +17,10 @@ app.use(expressValidator());
 app.use(expressSession({secret: 'secret', saveUninitialized: false, resave: false}));
 app.use(express.static(__dirname+'/public'));
 
+
+ var multer = require('multer');
+    var upload = multer({ dest: './uploads' });
+
 app.use('/api', appRoutes);
 mongoose.Promise = global.Promise;
 
@@ -33,6 +37,10 @@ mongoose.connect('mongodb://localhost:27017/middlistdb', function(err){
 
 	}
 });
+
+
+
+
 app.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
