@@ -1,0 +1,62 @@
+#label3{
+	right: 28px;
+}#expand{
+    background-color: #008CBA; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+}#listItem{
+	font-size: 20;
+	font-weight: normal;
+}#listItem2{
+	font-size: 20;
+	font-weight: normal;
+	left: 100px	;
+}#heading1{
+	font-size: 25px;
+}#heading2{
+	font-size: 25px;
+}#heading3{
+	font-size: 25px;
+}#heading4{
+	font-size: 25px;
+}#heaing1div{
+	left: -20px;
+
+}#heaing2div{
+	left: -20px;
+	
+}#heaing3div{
+	left: -20px;
+	
+}#heaing4div{
+	
+}#list{
+	background-color: #E7F7FE;
+	border-color: black;
+	right: 100px;
+}#postpage{
+	background-color: #E7F7FE;
+}#titledash{
+	left: 200px;
+	font-weight: bold;
+	font-size: 40px;
+}#titleDiv{
+	left: 100px;
+}#thing1{
+	font-size: 25px;
+	left: 8px;
+}#thing2{
+	font-size: 25px;
+	left: 8px;
+}#thing3{
+	font-size: 25px;
+	left: 110px;
+}#list2{
+	background-color: #E7F7FE;
+	border-color: black;
+}

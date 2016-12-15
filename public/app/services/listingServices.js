@@ -5,8 +5,8 @@ angular.module('listingServices',['listingServices'])
 	//user.create(regData);
 	sellFactory.create=function(sellData){
 		
-		sellData["email"]=email;
-		console.log(sellData);
+		//sellData["email"]=email;
+		//console.log(sellData);
 		
 	
 		return $http.post('api/sells',sellData);

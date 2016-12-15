@@ -1,59 +1,88 @@
+
+
+
+
 <div class="page-header">
-	
-	<h1>The following Item are up for sells</h1>
-	<!-- <h1 ng-repeat="item in main.listing">
-	 {{item["title"]}}
-	</h1> -->
-	    <div class="panel panel-default">
+    
+    <label id="titledash">For Sale Listings</label></br>
+    <!-- <h1 ng-repeat="item in main.listing">
+     {{item["title"]}}
+    </h1> -->
+        <label id="titledash1">Keyword Search: </label>
+        <input type="text" ng-model="searchBox">
+
+        <select id="myDropdown" ng-model="dropDown">
+             <option value="">All Listings</option>
+             <option value="Electronics">Electronics</option>
+             <option value="Furniture">Furniture</option>
+             <option value="Textbook">Textbook</option>
+             <option value="School Supplies">School Supplies</option>
+             <option value="Clothing">Clothing</option>
+             <option value="Vehicle">Vehicle</option>
+             <option value="Miscellaneous">Miscellaneous</option>
+        </select>
+       <!--  <div class="panel panel-default"> -->
         <div class="panel-heading"></div>
 
-                        <div class="col-sm-2">
-                       <h1>Title</h1>
+                        <div id="heaing1div"class="col-sm-2">
+                       <Label id="heading1">Title</label>
                         </div>
-                        <div class="col-sm-2">
-                       <h1>location</h1>
+                        <div id="heaing2div" class="col-sm-2">
+                       <label id="heading2">Category</label>
                         </div>
                         <!-- <div class="col-sm-2">
                        <h1>picture</h1>
                         </div> -->
-                        <div class="col-sm-2">
-                        <h1>Price</h1>
+                        <div id="heaing3div" class="col-sm-2">
+                       <label id="heading3">Price</label>
                         </div>
-                        <div class="col-sm-2">
-                        <h1>Description</h1>
+                        <div id="heaing4div" class="col-sm-2">
+                       <label id="heading4">Date</label>
                         </div>
                   </div>
 
-	<div class="panel-body">
-            <div class="input-group">
-                <li class="list-group-item" ng-repeat="itm in main.listing">
-                  <div class="container">
-                      
-                      
-                        
-                        <div class="col-sm-2">
+    <div class="panel-body">
+            <div class="input-group" id="listContainer">
+               <ul id="expList">
+                <li id="list" class="list-group-item" ng-repeat="itm in main.listing | filter: searchBox | filter: dropDown">
+                  <div class="container" ng-click="showDetails = ! showDetails">
+
+                        <div id="listItem" class="col-sm-2" ng-hide="showDetails">
                         {{itm.title}}
+
                         </div>
-                        <div class="col-sm-1">
-                        {{itm.location}}
+                        <div id="listItem" class="col-sm-1" ng-hide="showDetails">
+                        {{itm.category}}
                         </div>
-                         <div class="col-sm-2">
-                        {{itm.pic}}
+                         <div id="listItem2" class="col-sm-2" ng-hide="showDetails">
+                        {{itm.price}}$
                         </div>
-                        <div class="col-sm-1">
-                        {{itm.price}}
+                        <div id="listItem" class="col-sm-1" ng-hide="showDetails">
+                        {{itm.poster}}
                         </div>
                         
-                        <div class="col-sm-4">
-                        {{itm. description}}
+                        <div id="listItem" class="col-sm-4">
+                       <!--  {{itm.date.substring(0,10)}} -->
                         </div>
-                       
-                        <div class="col-sm-1">
-                         <button type="submit" class="btn btn-success" ng-click="()">Buy</button>
-                       
-                        </div>
+                        <button id="expand">Expand/Collapse Details</button>
+                            <div class="col-sm-4" id="abc" ng-show="showDetails">
 
-                  </div>
+                                         <h2 >{{itm.title}}</h2>
+                                            <label>Price: </label> {{itm.price}}
+                                            <label>Cateogry: </label> {{itm.category}}
+                                            <label>Condition: </label> {{itm.condition}}</br>
+                                            <label>Date: </label> {{itm.date.substring(0,10)}}
+                                            <label>Location: </label> {{itm.location}}</br>
+                                            <label>Contact Info:  </label>{{itm.poster}}</br>
+                                            <label>Description: </label> {{itm.description}}
+                               </div>
+                            </div>
+               
+                    </div>
+
+                  
                 </li>
+
             </div>
 </div>
+

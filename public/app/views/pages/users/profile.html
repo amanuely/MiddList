@@ -41,10 +41,16 @@
 
 
 
-
+<h1>Manage Your Listings: </h1>
     <div class="panel-body">
-            <div class="input-group">
-                <li class="list-group-item" ng-repeat="itm in main.listing">
+        <div class="panel-heading">
+            <label id="thing1" class="col-sm-2">Title</label> 
+            <label id="thing2" class="col-sm-2">Location</label>
+            <label id="thing3" class="col-sm-2">Price</label>
+        </div>
+
+            <div class="input-group">            
+                <li id="list2" class="list-group-item" ng-repeat="itm in main.listing">
                   <div class="container">
                       
                       
@@ -59,15 +65,15 @@
                         {{itm.pic}}
                         </div>
                         <div class="col-sm-1">
-                        {{itm.price}}
+                        {{itm.price}}$
                         </div>
                         
                         <div class="col-sm-4">
-                        {{itm. description}}
+                       <!--  {{itm. description}} -->
                         </div>
                        
                         <div class="col-sm-1">
-                         <button type="submit" class="btn btn-danger" ng-click="listController.deleteItem(itm)">{{main.useremail}}</button>
+                         <button type="submit" class="btn btn-danger" ng-click="listController.deleteItem(itm)">Delete</button>
                        
                         </div>
 

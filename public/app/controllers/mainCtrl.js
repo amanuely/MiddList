@@ -21,7 +21,7 @@ angular.module('mainController',['authServices'])
 
 		Auth.getListing().then(function(result){
 			//console.log("returning data");
-			//console.log(result);
+			console.log(result);
 			app.useremail=app.email;
 			app.listing=result.data;
 

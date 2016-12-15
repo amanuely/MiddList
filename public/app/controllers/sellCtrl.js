@@ -12,8 +12,8 @@ angular.module('sellController',['listingServices'])
 
 			Auth.getUser().then(function(d){
 				console.log("the following");
-				poster=d.data.email;
-				console.log(poster);
+				//poster=d.data.email;
+				//console.log(poster);
 
 			});
 	

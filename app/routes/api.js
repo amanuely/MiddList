@@ -106,11 +106,14 @@ if(req.body.email==null|| req.body.email==''||req.body.password==null|| req.body
 	else{
 
 
+
+  //arguments: /(\W|^)[\w.+\-]*@middlebury\.edu(\W|$)/,
 	// email and password validation 
-	req.check("name", "No Special Character or numbers, Must have space between name ").matches(/^(([a-zA-Z]{3,20})+[ ]+([a-zA-Z]{3,20})+)+$/);
+	req.check("email", "Must be Middlebury E-mail Address ").matches(/(\W|^)[\w.+\-]*@middlebury\.edu(\W|$)/);
+	req.check("name", "No Special Character or numbers and must have space between name.").matches(/^(([a-zA-Z]{3,20})+[ ]+([a-zA-Z]{3,20})+)+$/);
 	req.check('email', 'Invalid email address').isEmail();
-	req.check("password", "Password should  be at least 8 characters long, must contain one  digits, lowercase , Uppercase and special Character").matches( /^((?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W])).{8,40}$/, "i");
-	req.assert('passwordcfm', 'The two passwords you typed do not match').equals(req.body.password);
+	req.check("password", "Password should  be at least 8 characters long, must contain one number, lowercase, uppercase and special character").matches( /^((?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W])).{8,40}$/, "i");
+	req.assert('passwordcfm', 'Passwords do not match.').equals(req.body.password);
 
 
 	var errors = req.validationErrors();
@@ -193,7 +196,7 @@ router.get('/verify/:URL', function(req, res) {
     else {
        res.json({
         success:false,
-          message: 'There is error confirming your email adress!'
+          message: 'There is error confirming your email address!'
         });
     }
   });
@@ -210,22 +213,23 @@ router.post('/sells',function(req, res){
 	//req.body.title='not null';
 
 	sell.title= req.body.title;
-	sell.email= req.body.email;
+	sell.poster= req.body.poster;
+	sell.date = req.body.date;
   	sell.location=req.body.location;
   	sell.price=req.body.price;
   	sell.condition=  req.body.condition;
    sell.category=  req.body.category;
    sell. description=req.body. description;
-   sell.email= req.body.email;
+
    console.log(req.body.email);
 
    if (req.body.title==null||req.body.title=='') {
-   	res.json({success:false, message:'ensure that you have entered the title of what you are selling'});
+   	res.json({success:false, message:'Please include a title for your post.'});
 
    }
    else{
    	sell.save();
-   	res.json({success:true, message:'your item has been posted for sale'});
+   	res.json({success:true, message:'Your listing has been posted!'});
 
    }
 
@@ -239,7 +243,7 @@ router.post('/sells',function(req, res){
 	// login Api
 	router.post('/authenticate',function(req, res){
 		if (req.body.email==null||req.body.email==''||req.body.password==null||req.body.password=='') {
-   			res.json({success:false, message:'Ensure that you have entered both your email and password'});
+   			res.json({success:false, message:'Please fill out all the required fields.'});
 
    		}
 
