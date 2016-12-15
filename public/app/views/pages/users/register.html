@@ -1,5 +1,5 @@
-<div class="=page-header"> 
-<h1>User Registration</h1>
+<!-- <div class="=page-header"> 
+<h3>New to MiddList? Register here</h3>
  </div>
 
 <form name= "regForm" ng-submit="register.regUser(regData);" novalidate>
@@ -16,8 +16,8 @@
 	<label>password:</label>
 	<input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password">
 	<br>
-	<!-- <label>re-enter:</label>
-	<input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password"> -->
+	<label>re-enter:</label>
+	<input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="register.regData.password">
 	<br>
 	<button class="btn btn-success" type="submit">Register</button>
 
@@ -49,6 +49,78 @@
 <div>
 	
 </div>
+ -->
+
+ <div class="=page-header"> 
+
+<legend class="">New to MiddList? Register here</legend>
+ </div>
+  <br>
+
+
+
+<div class="container">
+  <form name= "regForm" ng-submit="register.regUser(regData);" novalidate>
+    <div class="form-group row">
+      <label for="lgFormGroupInput" class="col-sm-1 col-form-label col-form-label-lg">Name</label>
+      <div class="col-sm-4">
+        <input class="form-control" type="text" name="name" placeholder="e.g John Doe"
+	 ng-model="register.regData.name">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="smFormGroupInput" class="col-sm-1 col-form-label col-form-label-sm">Email</label>
+      <div class="col-sm-4">
+      <input class="form-control" type="text" name="email" placeholder="email@middlebury.edu"
+	 ng-model="register.regData.email">
+        
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="smFormGroupInput" class="col-sm-1 col-form-label col-form-label-sm">password</label>
+      <div class="col-sm-4">
+      <input class="form-control" type="password" name="password" placeholder="please enter your password"
+	 ng-model="register.regData.password">
+        
+      </div>
+    </div>
+
+      <div class="form-group row">
+      <label for="smFormGroupInput" class="col-sm-1 col-form-label col-form-label-sm"> Confirm password</label>
+      <div class="col-sm-4">
+      <input class="form-control" type="password" name="passwordcfm" placeholder="re-enter your password again"
+	 ng-model="register.regData.passwordcfm">
+        
+      </div>
+    </div>
+
+    <button class="btn btn-success" type="submit">Register</button>
+
+  </form>
+</div>
+
+<div>
+		<span> {{regFrom}}</span>
+</div>
+
+
+<br>
+
+<div class="row show-hide-message" ng-show="register.successMsg">
+<div class=" alert alert-success"> {{register.successMsg}}</div>
+	
+</div>
+
+<div class="row show-hide-message" ng-show="register.errorsMsg">
+<div class=" alert alert-danger"> {{register.errorsMsg}}</div>
+	
+</div>
+
+<div>
+	
+</div>
+
 
 
 	

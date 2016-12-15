@@ -39,14 +39,6 @@
 </div> -->
 
 
-<div class="row show-hide-message" ng-show="main.successMsg">
-<div class=" alert alert-success"> {{main.successMsg}}</div>
-    
-</div>
-
-<div class="row show-hide-message" ng-show="main.errorsMsg">
-<div class=" alert alert-danger"> {{main.errorsMsg}}</div>
-    
 
 
 
@@ -75,7 +67,7 @@
                         </div>
                        
                         <div class="col-sm-1">
-                         <button type="submit" class="btn btn-danger" ng-click="listController.deleteItem(itm)">Delete</button>
+                         <button type="submit" class="btn btn-danger" ng-click="listController.deleteItem(itm)">{{main.useremail}}</button>
                        
                         </div>
 
@@ -83,3 +75,16 @@
                 </li>
             </div>
 </div>
+
+
+<div class="row show-hide-message" ng-show="main.successMsg">
+<div class=" alert alert-success"> {{main.successMsg}}</div>
+    
+</div>
+
+<div class="row show-hide-message" ng-show="main.errorsMsg">
+<div class=" alert alert-danger"> {{main.errorsMsg}}</div>
+    
+
+
+

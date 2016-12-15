@@ -17,12 +17,16 @@ angular.module('mainController',['authServices'])
 			app.name=data.data.name;
 			app.loadme=true;
 		});
-		Auth.delete();
+
 
 		Auth.getListing().then(function(result){
 			//console.log("returning data");
 			//console.log(result);
+			app.useremail=app.email;
 			app.listing=result.data;
+
+
+			//console.log(app.email);
 			//console.log(app.listing);
 			//app.email=data.data.email;
 			//app.name=data.data.name;

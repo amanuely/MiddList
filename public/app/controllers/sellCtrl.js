@@ -7,11 +7,25 @@ angular.module('sellController',['listingServices'])
 	var response =this;
 	
 	$scope.listController={};
+
+			var poster;
+
+			Auth.getUser().then(function(d){
+				console.log("the following");
+				poster=d.data.email;
+				console.log(poster);
+
+			});
 	
 		this.sellItem=function(sellData){
 			
-			//console.log(this.Auth);
-			Sell.create(item.sellData).then(function(data){
+			// console.log(sellData);
+			//console.log(sellData.email);
+			
+			
+			//console.log(Auth.g());
+			
+			Sell.create(item.sellData).then(function(data ){
 				if(data.data.success){
 					item.successMsg=data.data.message;
 						$timeout(function() {
@@ -86,109 +100,13 @@ angular.module('sellController',['listingServices'])
 
 
 
-	// sellFactory.upload=function(uploadUrl, data){
-	// 	//console.log(uploadUrl);
-	// 	//console.log(data);
-		
-	// 	var fd= new FormData();
+
+
+
+
+
+
+
+
+
 	
-
-	// }
-
-
-// .directive('filemodel', function() {
-//   return {
-//   	restrict:'A',
-//     controller:function($scope){
-//     	$scope.doUpload=function(){
-//     		console.log("uploading the picture");
-//     	}
-//     },
-//     link:function(scope, element, attrs){
-//     		attrs.$observe('filemodel', function(){
-//     			scope.doUpload('test');
-//     		})
-//     	}
-//   };
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-// .directive('filemodel',['$parse','multipartForm', function($parse){
-// 	console.log("parsing");
-
-// 	return {
-// 		restrict:'A',
-// 		controller:function($scope){
-//     	$scope.doUpload=function(){
-//     		console.log("uploading the picture");
-//     	}
-//     },
-
-// 		link:function(scope,element, attrs){
-// 			var model=$parse(attrs.fileModel);
-// 			var modelSetter= model.assign;
-// 			element.bind('change', function(){
-// 				$scope.apply(function(){
-// 					modelSetter(scope, element[0].file[0]);
-// 				})
-
-// 			})
-
-// 		}
-// 	}
-
-// }]);
-
-
-// `
-
-
-
-
-
-
- // .config(function () {
-	// console.log("testing sell controller");
- // });
-
-// .controller('sellctrl',function($http, $location,$timeout, Sell){
-
-// 	var item=this;
-// 	this.sellItem=function(sellData){
-		
-
-		
-// 		console.log("here");
-// 		Sell.create(item.sellData).then(function(data){
-// 				console.log(data);
-			
-// 			// if (data.data.success) {
-// 			// 	//app.successMsg=data.data.message;
-				
-
-// 			// 	$timeout(function() {
-// 			// 		$location.path('/');
-// 			// 	},
-// 			// 	 2000);
-
-
-// 			// }
-// 			// else{
-// 			// 	//app.errorsMsg=data.data.message;
-
-// 			// }
-
-// 		});
-
-// 	};
-// });
