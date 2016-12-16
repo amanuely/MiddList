@@ -7,7 +7,8 @@ var SellSchema= new Schema({
   price: String,
   condition:   String,
    category:   String,
-   email:   String,
+   poster:   String,
+   date:   String,
    description:String
 
 });

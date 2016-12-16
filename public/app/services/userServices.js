@@ -7,6 +7,9 @@ angular.module('userServices',[])
 	
 		return $http.post('api/users',regData);
 	}
+	userFactory.confirm= function(){
+		return $http.post('api/verify/:id');
+	}
 	return userFactory;
 	// body...
 });

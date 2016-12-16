@@ -4,102 +4,251 @@ var Sell=require('../models/sells');
 var jwt = require('jsonwebtoken');
 var secret='paninni';
 var validate = require('mongoose-validator');
+var mongoose=require('mongoose');
+var nev = require('email-verification')(mongoose);
+var  bcrypt = require('bcryptjs');
+var expressValidator= require('express-validator');
+var expressSession= require('express-session');
+var multer  = require('multer')
+var upload = multer()
+
+
+
+
 module.exports= function(router){
 
-	// user registration
-	router.post('/users', function(req, res){
+
+
+
+
+	//sync version of hashing function
+var myHasher = function(password, tempUserData, insertTempUser, callback) {
+  var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+  return insertTempUser(hash, tempUserData, callback);
+};
+
+// async version of hashing function
+myHasher = function(password, tempUserData, insertTempUser, callback) {
+  bcrypt.genSalt(8, function(err, salt) {
+    bcrypt.hash(password, salt, function(err, hash) {
+      return insertTempUser(hash, tempUserData, callback);
+    });
+  });
+};
+
+
+
+
+// NEV configuration =====================
+nev.configure({
+  persistentUserModel: User,
+  expirationTime: 600, // 10 minutes
+  verificationURL: 'http://localhost:8080/verify/${URL}',
+  transportOptions: {
+    service: 'Gmail',
+    auth: {
+     user: 'listmidd@gmail.com',
+      pass: 'middlebury2017'
+    }
+  },
+
+  hashingFunction: myHasher,
+  passwordFieldName: 'pw',
+}, function(err, options) {
+  if (err) {
+    console.log(err);
+    return;
+  }
+
+  console.log('configured: ' + (typeof options === 'object'));
+});
+
+
+
+
+
+
+
+// create a temporary User model
+nev.generateTempUserModel(User, function(err, tempUserModel) {
+  if (err) {
+    console.log(err);
+    return;
+  }
+
+  console.log('generated temp user model: ' + (typeof tempUserModel === 'function'));
+});
+
+
+
+
+
+// user registration
+router.post('/users', function(req, res){
 	var user= new User();
 	user.name= req.body.name;
 	user.email= req.body.email;
-	user.password= req.body.password;
-	//console.log("printing");
-	//console.log(req.body);
-	
-	if(req.body.email==null|| req.body.email==''||req.body.password==null|| req.body.password==''||req.body.name==null|| req.body.name==''){
-		// console.log(req.body.email);
-		// console.log(req.body.password);
-		// console.log(req.body.name);
-		res.json({success:false, message:'ensure email or password were entered '});
-
-	}else{
-		user.save(function(err){
-		if (err) {
-			if(err.errors!=null){
-				if (err.errors.name) {
-					res.json({success:false, message:err.errors.name.message});
-				}
-				else if(err.errors.email){
-					res.json({success:false, message:err.errors.email.message});
-				}
-				else if(err.errors.password){
-					res.json({success:false, message:err.errors.password.message});
-				}
-				else{
-					res.json({success:false, message:err});
-
-				}
-
-			}
-			else if(err){
-				if(err.code==11000){
-					res.json({success:false, message:'Email already taken '});
-
-				}
-				else{
-					res.json({success:false, message:err});
-				}
-
-				
-
-			}
-
-			else{
-				res.json({success:true, message:'Your account has been created '});
-
-			}
-
-		}
-		else{
-			res.json({success:true, message:err});
-
-		}
+	user.pw= req.body.password;
+	var email=req.body.email;
 		
-	});
+		
+
+
+// if email or password field is empty respond to the user
+if(req.body.email==null|| req.body.email==''||req.body.password==null|| req.body.password==''||req.body.name==null|| req.body.name==''){
+	
+	res.json({success:false, message:'Please make sure  you have entered all the required fields '});
+
+}
+	
+
+
+	else{
+
+
+
+  //arguments: /(\W|^)[\w.+\-]*@middlebury\.edu(\W|$)/,
+	// email and password validation 
+	req.check("email", "Must be Middlebury E-mail Address ").matches(/(\W|^)[\w.+\-]*@middlebury\.edu(\W|$)/);
+	req.check("name", "No Special Character or numbers and must have space between name.").matches(/^(([a-zA-Z]{3,20})+[ ]+([a-zA-Z]{3,20})+)+$/);
+	req.check('email', 'Invalid email address').isEmail();
+	req.check("password", "Password should  be at least 8 characters long, must contain one number, lowercase, uppercase and special character").matches( /^((?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\d])(?=.*?[\W])).{8,40}$/, "i");
+	req.assert('passwordcfm', 'Passwords do not match.').equals(req.body.password);
+
+
+	var errors = req.validationErrors();
+		if (errors) {
+			console.log(errors);
+
+			return res.json({
+			      success:false, message: errors[0]["msg"] });
+		 } 
+
+
+
+
+
+	 		 // now that our email and password are valid, we send the user a verification email
+
+   nev.createTempUser(user, function(err, existingPersistentUser, newTempUser) {
+      if (err) {
+        return res.status(404).send('ERROR: creating temp user FAILED');
+      }
+
+      // user already exists in persistent collection
+      if (existingPersistentUser) {
+      
+        return res.json({
+        	success:false,
+          message: 'You have already signed up and confirmed your account. Did you forget your password?'
+        });
+      }
+
+
+      // new user created
+      if (newTempUser) {
+
+      	
+        var URL = newTempUser[nev.options.URLFieldName];
+
+        nev.sendVerificationEmail(email, URL, function(err, info) {
+          if (err) {
+            return res.status(404).send('ERROR: sending verification email FAILED');
+          }
+          
+          res.json({
+          	success:true,
+            message: 'An email has been sent to you. Please check it to verify your account.',
+            info: info
+          });
+        });
+
+      
+      } else {
+    
+        res.json({
+        success:true,
+          message: 'You have already signed up. Please check your email to verify your account.'
+        });
+      }
+    });
+
 	}
 
 });
-	router.post('/sells',function(req, res){
+
+
+
+
+router.get('/verify/:URL', function(req, res) {
+	console.log("yeeeeeees");
+
+  var url = req.params.URL;
+
+  nev.confirmTempUser(url, function(err, user) {
+    if (user) {
+       res.json({
+        success:true,
+          message: 'CONFIRMED!'
+        });
+
+    } 
+    else {
+       res.json({
+        success:false,
+          message: 'There is error confirming your email address!'
+        });
+    }
+  });
+});
+
+
+
+
+
+
+router.post('/sells',function(req, res){
 	var sell= new Sell();
 	//console.log(sell);
 	//req.body.title='not null';
 
 	sell.title= req.body.title;
-	sell.email= req.body.email;
+	sell.poster= req.body.poster;
+	sell.date = req.body.date;
   	sell.location=req.body.location;
   	sell.price=req.body.price;
   	sell.condition=  req.body.condition;
    sell.category=  req.body.category;
    sell. description=req.body. description;
 
-
-   // sell.save();
-   // res.send("sell item saved");
+   console.log(req.body.email);
 
    if (req.body.title==null||req.body.title=='') {
-   	res.json({success:false, message:'ensure that you have entered the title of what you are selling'});
+   	res.json({success:false, message:'Please include a title for your post.'});
 
    }
    else{
    	sell.save();
-   	res.json({success:true, message:'your item has been posted for sale'});
+   	res.json({success:true, message:'Your listing has been posted!'});
 
    }
 
 });
 
-	router.post('/authenticate',function(req, res){
 
-		User.findOne({email:req.body.email}).select('email password').exec(function(err, user){
+
+
+
+
+	// login Api
+	router.post('/authenticate',function(req, res){
+		if (req.body.email==null||req.body.email==''||req.body.password==null||req.body.password=='') {
+   			res.json({success:false, message:'Please fill out all the required fields.'});
+
+   		}
+
+		User.findOne({email:req.body.email}).select('email pw').exec(function(err, user){
+		
 			if (err) {
 				throw err;
 			}
@@ -108,18 +257,10 @@ module.exports= function(router){
 
 			}
 			else if(user){
-				
 
-				if (req.body.password) {
+			var validpassword=user.validPassword(req.body.password);
 
-						var validpassword=user.comparePassword(req.body.password);
-
-				}
-				else{
-					res.json({success:false, message:'no password '});
-
-				}
-					if(!validpassword){
+				if(!validpassword){
 						res.json({success:false, message:'wrong password '});
 
 					}
@@ -158,9 +299,27 @@ module.exports= function(router){
 
 
 	});
+
+
 	router.post('/profile',function(req,res){
+		console.log(req.decoded);
 		res.send(req.decoded);
-	})
+	});
+
+	router.put('/delete',function(req,res){
+
+		//console.log(req.body._id);
+
+		Sell.remove({ title: req.body.title}, function (err) {
+	  if (err) return handleError(err);
+	  // removed!
+	});
+		//console.log("here");
+		res.json({success:true, message:'we will delete your stuff '});
+	});
+
+
+
 	router.get('/sells',function(req,res){
 		Sell.find({}).exec(function(err,result){
 			if (err) {

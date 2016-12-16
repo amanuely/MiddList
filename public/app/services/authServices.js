@@ -3,7 +3,7 @@ angular.module('authServices',[])
 	var authFactory={};
 	//user.create(regData);
 	authFactory.login=function(loginData){
-	
+	//console.log('we are here');
 		return $http.post('api/authenticate',loginData).then(function(data){
 			 AuthToken.setToken(data.data.token);
 			
@@ -18,6 +18,14 @@ angular.module('authServices',[])
 		else{
 			return false;
 		}
+
+	};
+
+
+	authFactory.getEmail=function(){
+		 return AuthToken.getToken()
+		
+		
 
 	};
 
@@ -37,6 +45,8 @@ angular.module('authServices',[])
 		}
 
 	};
+
+
 
 	authFactory.logout=function(){
 		AuthToken.setToken();

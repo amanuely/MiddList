@@ -8,6 +8,13 @@ var app=angular.module('appRoutes',['ngRoute'])
 				authenticated:true
 
 			})
+		.when('/verify/:id',{
+				templateUrl:'app/views/pages/about.html',
+				controller:'cfmctrl',
+				controllerAs:'conformer',
+				authenticated:false
+
+			})
 		.when('/home',{
 				templateUrl:'app/views/pages/home.html',
 				controller:'sellctrl',
@@ -59,6 +66,8 @@ var app=angular.module('appRoutes',['ngRoute'])
 
 
 			templateUrl:'app/views/pages/users/profile.html',
+			controller:'sellctrl',
+			controllerAs:'listController',
 			authenticated:true
 
 		})
@@ -74,8 +83,11 @@ var app=angular.module('appRoutes',['ngRoute'])
 
 	app.run(['$rootScope','Auth','$location',function($rootScope, Auth,$location){
 			$rootScope.$on('$routeChangeStart', function(even, next,current){
-				//console.log(Auth.isLoggedIn());
+				
 
+				if(next.$$route=='undefined'){
+					console.log('hey');
+				}
 				if (next.$$route.authenticated==true) {
 					if(!Auth.isLoggedIn()){
 						even.preventDefault();
