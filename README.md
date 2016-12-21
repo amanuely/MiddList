@@ -15,5 +15,5 @@ Make sure you  have the following installed
 
   - npm install
 
-  after you clone the Middlist repository, navigate to the middlist folder and type npm install
+  after you clone the Middlist repository, navigate to the middlist folder and type npm install.         
   This will install npm packages required for the app to run.
