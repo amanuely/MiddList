@@ -29,11 +29,12 @@ when you installed it. Then navigate the bin folder and run
 
 	./mongod
 
-2) To run server file, navigate to middList folder and run
+2) To run server file,  open new terminal and navigate to middList folder and run the command
 
-		node server.js
+			node server.js
 
 3) now that we have the database and server running, you can go to the browser and type
 	
-	http://localhost:8080/
+		http://localhost:8080/
+
 
