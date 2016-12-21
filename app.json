@@ -1,0 +1,11 @@
+{
+  "name": "Midd List",
+  "description": "Middlebury specific craiglist",
+  "keywords": [
+    "small",
+    "sharp",
+    "tool"
+  ],
+  "addons": [],
+  "env": {}
+}
