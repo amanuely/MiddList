@@ -6,19 +6,13 @@ angular.module('userControllers',['userServices'])
 
 	var app=this;
 	this.regUser=function(regData){
-		//console.log("forme");
-		//console.log(regData);
+		
 		app.errorsMsg=false;
 
-		
-		//console.log(this.regData);
 		User.create(app.regData).then(function(data){
-				//console.log(data);
 			
 			if (data.data.success) {
 				app.successMsg=data.data.message;
-				
-
 				$timeout(function() {
 					$location.path('/');
 				},
@@ -36,7 +30,3 @@ angular.module('userControllers',['userServices'])
 
 	};
 });
-
-// config(function () {
-// 	console.log("testing user controller");
-// });

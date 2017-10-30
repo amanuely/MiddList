@@ -13,13 +13,7 @@ var multer  = require('multer')
 var upload = multer()
 
 
-
-
 module.exports= function(router){
-
-
-
-
 
 	//sync version of hashing function
 var myHasher = function(password, tempUserData, insertTempUser, callback) {
@@ -66,9 +60,6 @@ nev.configure({
 
 
 
-
-
-
 // create a temporary User model
 nev.generateTempUserModel(User, function(err, tempUserModel) {
   if (err) {
@@ -102,9 +93,7 @@ if(req.body.email==null|| req.body.email==''||req.body.password==null|| req.body
 }
 	
 
-
 	else{
-
 
 
   //arguments: /(\W|^)[\w.+\-]*@middlebury\.edu(\W|$)/,
@@ -123,10 +112,6 @@ if(req.body.email==null|| req.body.email==''||req.body.password==null|| req.body
 			return res.json({
 			      success:false, message: errors[0]["msg"] });
 		 } 
-
-
-
-
 
 	 		 // now that our email and password are valid, we send the user a verification email
 

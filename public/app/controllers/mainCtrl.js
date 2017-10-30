@@ -3,8 +3,6 @@ angular.module('mainController',['authServices'])
 	var app=this;
 	app.loadme=false;
 
-
-
 	
 	$rootScope.$on('$routeChangeStart', function(){
 
@@ -25,11 +23,6 @@ angular.module('mainController',['authServices'])
 			app.useremail=app.email;
 			app.listing=result.data;
 
-
-			//console.log(app.email);
-			//console.log(app.listing);
-			//app.email=data.data.email;
-			//app.name=data.data.name;
 			app.loadme=true;
 		});
 

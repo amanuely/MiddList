@@ -24,8 +24,6 @@ angular.module('Cfmcontroller',[])
 				 2000);
 
 
-
-
 	  	}
 	  	else{
 	  		message.errorsMsg=data.data;
